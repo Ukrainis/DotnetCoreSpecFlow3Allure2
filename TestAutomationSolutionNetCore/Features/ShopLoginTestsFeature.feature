@@ -3,6 +3,7 @@
 
 @UiTest
 @ChromeLocal
+@issue:111
 @blocker
 Scenario Outline: Shop login tests Chrome
 	Given I am navigated to Shop application main page
@@ -16,3 +17,8 @@ Scenario Outline: Shop login tests Chrome
 	| test         | pass     | Invalid email address.     |
 	|              | 123456   | An email address required. |
 	| uk@gmail.com |          | Password is required.      |
+
+@minor
+Scenario: Validating that Cart is empty by default
+	Given I am navigated to Shop application main page
+	Then I see that cart has (empty) default value

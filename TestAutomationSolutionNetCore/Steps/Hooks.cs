@@ -57,26 +57,8 @@ namespace Tests.Steps
 
             _driver.Close();
 
-            AddBrowserStackLink();
+            AddTestLinkLink();
 
-            AllureHackForScenarioOutlineTests();
-        }
-
-        private void AllureHackForScenarioOutlineTests()
-        {
-            var testResult = GetTestResult();
-
-            var testFullName = TestContext.CurrentContext.Test.FullName;
-
-            var paramsMatch = Regex.Match(testFullName, @"\((.*)\)$");
-            if (paramsMatch.Success)
-            {
-                AllureLifecycle.Instance.UpdateTestCase(testResult.uuid, tc =>
-                {
-                    tc.name += " " + paramsMatch.Groups[0].Value.Replace(",null", string.Empty);
-                    tc.historyId = testFullName;
-                });
-            }
         }
 
         [AfterTestRun]
@@ -101,7 +83,7 @@ namespace Tests.Steps
             }
         }
 
-        private void AddBrowserStackLink()
+        private void AddTestLinkLink()
         {
             var testResult = GetTestResult();
             _allureLifecycle.UpdateTestCase(testResult.uuid, tc =>

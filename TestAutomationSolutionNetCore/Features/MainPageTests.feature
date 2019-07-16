@@ -4,7 +4,7 @@
 
 @UiTest
 @Chrome
-@low
+@critical
 @issue:111
 Scenario: Verifying shop phone number on the Home page
 	Given I am navigated to Shop application main page

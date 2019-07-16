@@ -26,6 +26,16 @@ namespace Tests.Steps
             shopMainPage.MainPageSlider.WaitForElementPresent(_driver);
         }
 
+        [Then(@"I see that cart has (.*) default value")]
+        public void ThenISeeThatCartHasEmptyDefaultValue(string cartValueExpected)
+        {
+            shopMainPage.EmptyCartElement.WaitForElementPresent(_driver);
+            var cartValueActual = shopMainPage.EmptyCartElement.Text;
+
+            cartValueActual.Should().BeEquivalentTo(cartValueExpected);
+        }
+
+
         [When(@"I click Sign in link")]
         public void WhenIClickSignInLink()
         {

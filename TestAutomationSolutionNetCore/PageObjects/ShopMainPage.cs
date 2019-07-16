@@ -11,6 +11,9 @@ namespace TestAutomationSolutionNetCore.PageObjects
             PageFactory.InitElements(driver, this);
         }
 
+        [FindsBy(How = How.CssSelector, Using = ".shopping_cart span.ajax_cart_no_product")]
+        public IWebElement EmptyCartElement { get; set; }
+
         [FindsBy(How = How.CssSelector, Using = ".shop-phone strong")]
         public IWebElement ShopPhoneNumberLabel { get; set; }
 

@@ -9,7 +9,7 @@
   <ItemGroup>
     <PackageReference Include="DotNetSeleniumExtras.PageObjects.Core" Version="3.12.0" />
     <PackageReference Include="FluentAssertions" Version="5.7.0" />
-    <PackageReference Include="Noksa.NUnit.SpecFlow3" Version="1.0.1" />
+    <PackageReference Include="Noksa.NUnit.SpecFlow3" Version="1.0.5" />
     <PackageReference Include="nunit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
