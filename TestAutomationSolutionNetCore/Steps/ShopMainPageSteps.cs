@@ -23,12 +23,13 @@ namespace Tests.Steps
         public void GivenIAmNavigatedToShopApplication()
         {
             _driver.Navigate().GoToUrl("http://automationpractice.com/index.php");
+            shopMainPage.MainPageSlider.WaitForElementPresent(_driver);
         }
 
-        [Then(@"I am redirected to Shop application main page")]
-        public void ThenIAmRedirectedToShopApplicationMainPage()
+        [When(@"I click Sign in link")]
+        public void WhenIClickSignInLink()
         {
-            shopMainPage.MainPageSlider.WaitForElementPresent(_driver);
+            shopMainPage.SignInLink.Click();
         }
 
         [Then(@"I see that page title equals to ""(.*)""")]

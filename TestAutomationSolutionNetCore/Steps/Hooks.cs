@@ -3,16 +3,16 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using Allure.Commons;
+using Allure.Commons.Model;
 using BoDi;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using TechTalk.SpecFlow;
 using WebDriverManager;
 using WebDriverManager.DriverConfigs.Impl;
-using TestResult = Allure.Commons.TestResult;
 
 namespace Tests.Steps
 {
@@ -23,6 +23,7 @@ namespace Tests.Steps
         private readonly IObjectContainer _objectContainer;
         private readonly ScenarioContext _scenarioContext;
         private AllureLifecycle _allureLifecycle;
+        internal static string AllureConfigDir => TestContext.CurrentContext.WorkDirectory;
 
         public Hooks(IObjectContainer objectContainer, ScenarioContext scenarioContext)
         {
@@ -56,17 +57,26 @@ namespace Tests.Steps
 
             _driver.Close();
 
+            AddBrowserStackLink();
+
             AllureHackForScenarioOutlineTests();
         }
 
         private void AllureHackForScenarioOutlineTests()
         {
-            _scenarioContext.TryGetValue(out TestResult testresult);
-            _allureLifecycle.UpdateTestCase(testresult.uuid, tc =>
+            var testResult = GetTestResult();
+
+            var testFullName = TestContext.CurrentContext.Test.FullName;
+
+            var paramsMatch = Regex.Match(testFullName, @"\((.*)\)$");
+            if (paramsMatch.Success)
             {
-                tc.name = _scenarioContext.ScenarioInfo.Title;
-                tc.historyId = Guid.NewGuid().ToString();
-            });
+                AllureLifecycle.Instance.UpdateTestCase(testResult.uuid, tc =>
+                {
+                    tc.name += " " + paramsMatch.Groups[0].Value.Replace(",null", string.Empty);
+                    tc.historyId = testFullName;
+                });
+            }
         }
 
         [AfterTestRun]
@@ -91,11 +101,30 @@ namespace Tests.Steps
             }
         }
 
+        private void AddBrowserStackLink()
+        {
+            var testResult = GetTestResult();
+            _allureLifecycle.UpdateTestCase(testResult.uuid, tc =>
+            {
+                tc.links.Add(new Link()
+                {
+                    name = "TestLink",
+                    url = "http://google.com"
+                });
+            });
+        }
+
+        private TestResult GetTestResult()
+        {
+            _scenarioContext.TryGetValue(out TestResult testresult);
+            return testresult;
+        }
+
         public static string MakeScreenshot(IWebDriver driver, string testName = "screen")
         {
             string projectPath = Path.GetDirectoryName(GetTestAssemblyFolder());
             Screenshot ss = ((ITakesScreenshot)driver).GetScreenshot();
-            string fileLocation = $"{projectPath}/{testName}.png";
+            string fileLocation = $"{projectPath}\\{testName}.png";
             ss.SaveAsFile(fileLocation, ScreenshotImageFormat.Png);
             return fileLocation;
         }

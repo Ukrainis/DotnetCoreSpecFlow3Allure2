@@ -2,8 +2,19 @@
   "allure": {
     "directory": "allure-results",
     "links": [
-      "https://example.org/{issue}",
-      "https://example.org/{tms}"
+      "https://www.google.com/search?q={issue}",
+      "https://www.google.com/search?q={tms}"
     ]
+  },
+  "specflow": {
+    "links": {
+      "link": "^link:(.+)",
+      "issue": "^issue:(\\d+)",
+      "tms": "^tms:(\\d+)"
+    },
+    "labels": {
+      "owner": "^owner:?(.+)",
+      "severity": "^(normal|blocker|critical|minor|trivial)"
+    }
   }
 }
